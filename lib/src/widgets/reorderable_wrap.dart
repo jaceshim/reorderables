@@ -287,11 +287,29 @@ class _ReorderableWrapState extends State<ReorderableWrap> {
 
   @override
   Widget build(BuildContext context) {
-    return PassthroughOverlay(
-        key: _overlayKey,
-        initialEntries: <PassthroughOverlayEntry>[
-          _listOverlayEntry,
-        ]);
+    return _ReorderableWrapContent(
+          header: widget.header,
+          footer: widget.footer,
+          children: widget.children,
+          direction: widget.direction,
+          scrollDirection: widget.scrollDirection,
+          onReorder: widget.onReorder,
+          onNoReorder: widget.onNoReorder,
+          onReorderStarted: widget.onReorderStarted,
+          padding: widget.padding,
+          buildItemsContainer: widget.buildItemsContainer,
+          buildDraggableFeedback: widget.buildDraggableFeedback,
+          needsLongPressDraggable: widget.needsLongPressDraggable,
+          alignment: widget.alignment,
+          spacing: widget.spacing,
+          runAlignment: widget.runAlignment,
+          runSpacing: widget.runSpacing,
+          crossAxisAlignment: widget.crossAxisAlignment,
+          textDirection: widget.textDirection,
+          verticalDirection: widget.verticalDirection,
+          minMainAxisCount: widget.minMainAxisCount,
+          maxMainAxisCount: widget.maxMainAxisCount,
+        );
   }
 }
 
@@ -554,8 +572,9 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
         runAlignment = WrapAlignment.center;
         break;
     }
+
     return Wrap(
-      direction: widget.direction,
+      // direction: widget.direction,
       runAlignment: runAlignment,
       crossAxisAlignment: widget.crossAxisAlignment,
       children: children,
@@ -780,8 +799,7 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
         BoxConstraints contentSizeConstraints = BoxConstraints.loose(
             _draggingFeedbackSize); //renderObject.constraints
 //          debugPrint('feedbackBuilder: contentConstraints:$contentSizeConstraints');
-        return (widget.buildDraggableFeedback ?? defaultBuildDraggableFeedback)(
-            context, contentSizeConstraints, toWrap);
+        return toWrap; // overlay를 하지 않는 draggable 위젯. 
       });
 
       // We build the draggable inside of a layout builder so that we can
@@ -799,7 +817,7 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
                   ignoring: true,
                   child: Opacity(
                     opacity: 0.2,
-                    //child: toWrap,//Container(width: 0, height: 0, child: toWrap)
+                    // child: toWrap,//Container(width: 0, height: 0, child: toWrap)
                     child: _makeAppearingWidget(toWrap)
                   )
               ), //ConstrainedBox(constraints: contentConstraints),//SizedBox(),
